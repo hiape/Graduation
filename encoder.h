@@ -1,15 +1,17 @@
 #pragma once
 #include "configure.h"
 
+#include <string>
+
 namespace voip{
 
-	//编码器
+	//卤脿脗毛脝梅
 	class Encoder{
 	private:
-		uint m_packetDuration;   //持续时间，单位 ns
-		uint m_packetSize;      //打包的大小,单位 Byte
-		uint m_fs;              //采样的频率,单位 Hz
-		uint m_bitSample;		//采样的位数,单位 Bit
+		uint m_packetDuration;   //鲁脰脨酶脢卤录盲拢卢碌楼脦禄 ns
+		uint m_packetSize;      //麓貌掳眉碌脛麓贸脨隆,碌楼脦禄 Byte
+		uint m_fs;              //虏脡脩霉碌脛脝碌脗脢,碌楼脦禄 Hz
+		uint m_bitSample;		//虏脡脩霉碌脛脦禄脢媒,碌楼脦禄 Bit
 	public:
 		Encoder(uint duration=2000,uint packetSize = 160,uint fs=8000 ,uint bitSample = 8):m_packetDuration(duration),
 				m_packetSize(packetSize),
@@ -20,16 +22,16 @@ namespace voip{
 		virtual ~Encoder() {}
 
 		virtual bool Encode(const short int* pcm_data_ptr, uchar* encoded_data_ptr) = 0;
-		//获取对应RTP的 音频压缩类型
+		//禄帽脠隆露脭脫娄RTP碌脛 脪么脝碌脩鹿脣玫脌脿脨脥
 		virtual uchar GetRtpPayloadType() const = 0;
-		//获取编码器一次编码的采样数， 需要多少个采样样本
+		//禄帽脠隆卤脿脗毛脝梅脪禄麓脦卤脿脗毛碌脛虏脡脩霉脢媒拢卢 脨猫脪陋露脿脡脵赂枚虏脡脩霉脩霉卤戮
 		virtual unsigned short int GetPacketSize() const = 0;
-		//返回默认的打包间隔
+		//路碌禄脴脛卢脠脧碌脛麓貌掳眉录盲赂么
 		virtual unsigned short int GetPacketDuration() const { return m_packetDuration; }
 
 	};
 
-	//  G.711A  编码方式
+	//  G.711A  卤脿脗毛路陆脢陆
 	class G711aEncoder :public Encoder{
 	public:
 		G711aEncoder() {}
@@ -55,20 +57,22 @@ namespace voip{
 		virtual unsigned short int GetPacketSize() const { return G711_PACKET_SIZE; }
 	};
 
-	//编码的方法接口
+	//缂栫爜宸ュ巶
 	class EncoderFactory
 	{
 	private:
 
 	public:
-		//构造函数
+		//鹿鹿脭矛潞炉脢媒
 		EncoderFactory() {}
 
-		//析构函数
+		//脦枚鹿鹿潞炉脢媒
 		virtual ~EncoderFactory() {}
 
-		//创建编码器
+		//麓麓陆篓卤脿脗毛脝梅
 		virtual Encoder* CreateEncoder() const = 0;
+
+		virtual const std::string GetEncoderName() const = 0;
 	};
 
 	class G711aEncoderFactory : public EncoderFactory
@@ -94,6 +98,8 @@ namespace voip{
 		* @see G711aEncoderType()
 		*/
 		virtual Encoder* CreateEncoder() const { return new G711aEncoder(); }
+
+		virtual const std::string GetEncoderName()  const final  { return std::string("G711a");}
 	};
 
 	class G711uEncoderFactory : public EncoderFactory
@@ -119,5 +125,7 @@ namespace voip{
 		* @see G711uEncoderType()
 		*/
 		virtual Encoder* CreateEncoder() const { return new G711uEncoder(); }
+
+		virtual const std::string GetEncoderName()  const  final { return std::string("G711u");}
 	};
 }
