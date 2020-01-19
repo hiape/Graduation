@@ -3,8 +3,10 @@
 //
 
 #include "myfile.h"
-#include <stdio.h>
 
+#include <stdio.h>
+#include <sys/stat.h> 
+#include <unistd.h>
 
 namespace  voip{
 
@@ -47,8 +49,12 @@ namespace  voip{
         //如果文件打开失败
         if(!m_fp)
             return -1;
-        size_t  len = 10;
-        return len;
+        struct stat file_info;
+        int ret = stat(m_fileName.c_str(),&file_info);
+        //如果stat函数返回出错
+        if( ret == -1)
+            return -1;
+        return file_info.st_size;
     }
 
 

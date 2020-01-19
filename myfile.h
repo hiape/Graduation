@@ -54,8 +54,9 @@ namespace  voip{
 
        bool ReadFromFile(char* dataPtr, size_t dataLen);
 
-       //获取文件大小
+       //获取文件大小,返回字节数
        size_t GetFileSize() const ;
+       
        ~InFile()
        {
            if(m_fp)
